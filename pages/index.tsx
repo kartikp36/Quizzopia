@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import LogoImg from '../assets/quizzopia-logo.png'
 import { Inter } from 'next/font/google'
+import Button from '@/components/Button'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +18,9 @@ export default function Home() {
           priority
         />
       <div className="relative flex place-items-center">
-        Quizzopia!  
+        <Link href='/quiz'>
+          <Button text='Start Quiz'/>
+        </Link>
       </div>
     </main>
   )
