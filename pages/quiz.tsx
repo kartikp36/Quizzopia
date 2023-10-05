@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 import { Difficulty, QuestionsState, Question } from '@/types/quiz';
 import { useEffect, useState } from 'react';
-import QuizComponent from '@/components/Quiz';
+import QuizComponent from '@/components/QuizComponent';
 
 const TOTAL_QUESTIONS = 5;
 
@@ -53,7 +53,10 @@ const QuizPage = () => {
       />
       <div className='relative flex place-items-center'>
         {questions.length > 0 ? (
-          <QuizComponent questions={questions} totalQuestions={TOTAL_QUESTIONS} />
+          <QuizComponent
+            questions={questions}
+            totalQuestions={TOTAL_QUESTIONS}
+          />
         ) : (
           <div className='text-xl font-bold'>Loading...</div>
         )}

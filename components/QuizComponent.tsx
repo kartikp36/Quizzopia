@@ -25,8 +25,12 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
     if (isQuestionAnswered) return;
     console.log(answer);
     const isCorrect = questions[currentQuestionIndex].correct_answer === answer;
-    if (isCorrect) setScore((prev) => prev + 5);
-    else setScore((prev) => prev - 1);
+    if (isCorrect) {
+      console.log('correct');
+      setScore((prev) => prev + 5);
+    } else {
+      setScore((prev) => prev - 1);
+    }
     setUserAnswers((prev) => ({ ...prev, [currentQuestionIndex]: answer }));
   };
 
@@ -37,6 +41,31 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
     setCurrentQuestionIndex(newQuestionIndex);
   };
 
+  const correctAnswer = (
+    isQuestionAnswered: Boolean,
+    ans: string,
+    userAns: string,
+    correctAns: string
+  ) => {
+    if (isQuestionAnswered) {
+      console.log(ans, correctAns);
+      if (ans === correctAns) {
+        return 'bg-green-700 text-gray-100 transition-colors duration-200 ease-in-out';
+      }
+      if (ans === userAns) {
+        return 'bg-red-700 text-gray-100 transition-colors duration-200 ease-in-out';
+      } else {
+        return 'bg-gray-300 text-gray-700 transition-colors duration-200 ease-in-out';
+      }
+    }
+  };
+
+  const checkbgColor = (isQuestionAnswered: Boolean) => {
+    if (isQuestionAnswered) {
+      return 'text-[#3291ff] transition-colors duration-200 ease-in-out';
+    }
+  };
+
   return (
     <div className='text-center'>
       <p className='p-8 font-bold text-2xl text-[#63B69C]'>Score: {score}</p>
@@ -44,7 +73,9 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
         Question {currentQuestionIndex + 1} out of {totalQuestions}
       </p>
       <h2
-        className='max-w-[400px] text-gray-700 font-bold text-2xl pb-4'
+        className={`${checkbgColor(
+          isQuestionAnswered
+        )} max-w-[400px] text-gray-700 font-bold text-2xl pb-4`}
         dangerouslySetInnerHTML={{
           __html: questions[currentQuestionIndex].question,
         }}
@@ -53,7 +84,17 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
         {questions[currentQuestionIndex].answers.map((answer, index) => (
           <button
             key={index}
-            className='bg-gray-300 hover:bg-gray-800 hover:text-gray-200 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
+            id={`${answer}`}
+            className={`
+            ${correctAnswer(
+              isQuestionAnswered,
+              answer,
+              userAnswers[currentQuestionIndex],
+              questions[currentQuestionIndex]?.correct_answer
+            )}
+
+              
+             hover:bg-gray-800 hover:text-gray-200 transition-colors duration-200 ease-in-out font-bold py-2 px-4 rounded`}
             onClick={() => handleOnAnswerClick(answer, currentQuestionIndex)}>
             {answer}
           </button>
