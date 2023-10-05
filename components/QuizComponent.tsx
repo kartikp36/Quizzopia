@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
 // import QuestionCard from '@/components/QuestionCard/QuestionCard';
 import Button from '@/components/Button';
 import { QuestionsState } from '@/types/quiz';
@@ -12,6 +13,7 @@ type Props = {
 };
 
 const QuizComponent = ({ questions, totalQuestions }: Props) => {
+  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
@@ -92,9 +94,7 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
               userAnswers[currentQuestionIndex],
               questions[currentQuestionIndex]?.correct_answer
             )}
-
-              
-             hover:bg-gray-800 hover:text-gray-200 transition-colors duration-200 ease-in-out font-bold py-2 px-4 rounded`}
+            bg-gray-200 hover:bg-gray-800 hover:text-gray-200 transition-colors duration-200 ease-in-out font-bold py-2 px-4 rounded`}
             onClick={() => handleOnAnswerClick(answer, currentQuestionIndex)}>
             {answer}
           </button>
@@ -110,7 +110,7 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
           className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
           onClick={
             currentQuestionIndex === totalQuestions - 1
-              ? () => console.log('Finish')
+              ? () => router.push('/')
               : () => handleChangeQuestion(1)
           }>
           {currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}
