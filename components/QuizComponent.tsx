@@ -10,8 +10,8 @@ type Props = {
 };
 
 const QuizComponent = ({ questions, totalQuestions }: Props) => {
-  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const router = useRouter(); 
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
   const [skips, setSkips] = useState(0);
@@ -138,11 +138,19 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
           className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
           onClick={handleSkip}
         /> */}
-        <Button
-          text={currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}
-          className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
-          onClick={handleSkip}
-        />
+        {currentQuestionIndex !== totalQuestions - 1 ? (
+          <Button
+            text={'Next'}
+            className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
+            onClick={handleSkip}
+          />
+        ) : (
+          <Button
+            text={'Finish'}
+            className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
+            onClick={() => router.push('/')}
+          />
+        )}
       </div>
       {timeLeft >= 0 ? (
         <p className='text-gray-700 font-bold pb-2 text-sm mt-4'>
