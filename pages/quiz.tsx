@@ -52,21 +52,25 @@ const QuizPage = () => {
         alt='Quizzopia Logo'
         priority
       />
-      <div className='relative flex place-items-center'>
+      <div className='relative flex place-items-center mt-4'>
         {questions.length > 0 ? (
           <QuizComponent
             questions={questions}
             totalQuestions={TOTAL_QUESTIONS}
           />
         ) : (
-          <div className='text-2xl font-bold items-center'>
-            Getting Questions...
-            <Image
-              className='relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]  w-auto h-64'
-              src={LoadingGif}
-              alt='Quizzopia Logo'
-              priority
-            />
+          <div className='flex flex-col items-center justify-center h-full'>
+            <div className='animate-pulse flex items-center justify-center'>
+              <Image
+                className='relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]  w-auto h-36 mt-2 rounded'
+                src={LoadingGif}
+                alt='Quizzopia Logo'
+                priority
+              />
+            </div>
+            <p className='text-gray-800 font-bold text-3xl mt-4'>
+              Loading Questions...
+            </p>
           </div>
         )}
       </div>
