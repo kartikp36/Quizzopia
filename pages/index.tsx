@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className='flex flex-col items-center justify-between p-2'>
       <Image
-        className='relative shadow-md w-auto h-36'
+        className='relative w-auto h-36'
         src={LogoImg}
         alt='Quizzopia Logo'
         priority
@@ -21,8 +21,9 @@ export default function Home() {
         </p>
         <p className='text-gray-600 text-lg mb-8'>A quick quiz app!</p>
         <Link href='/quiz'>
-          <button className='bg-[#63B69C] hover:bg-[#63B66A] text-white font-bold py-2 px-4 rounded'>
+          <button className='transition ease-in-out delay-150 bg-[#63B69C] hover:-translate-y-1 hover:scale-110 hover:bg-[#76B69C] duration-300  text-white font-bold py-2 px-4 rounded'>
             Start Quiz
+
           </button>
         </Link>
       </div>

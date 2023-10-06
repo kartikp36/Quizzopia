@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import LogoImg from '../assets/quizzopia-logo.png';
+import LoadingGif from '../assets/loading.gif';
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -58,7 +59,15 @@ const QuizPage = () => {
             totalQuestions={TOTAL_QUESTIONS}
           />
         ) : (
-          <div className='text-xl font-bold'>Loading...</div>
+          <div className='text-xl font-bold'>
+            Getting Questions...
+            <Image
+              className='relative dark:drop-shadow-[0_0_0.3rem_#ffffff70]  w-auto h-64'
+              src={LoadingGif}
+              alt='Quizzopia Logo'
+              priority
+            />
+          </div>
         )}
       </div>
     </main>
