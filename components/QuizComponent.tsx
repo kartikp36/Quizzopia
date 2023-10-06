@@ -1,9 +1,6 @@
-'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
-// import QuestionCard from '@/components/QuestionCard/QuestionCard';
 import Button from '@/components/Button';
 import { QuestionsState } from '@/types/quiz';
 
@@ -17,31 +14,67 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
+  const [skips, setSkips] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(10);
 
   const isQuestionAnswered = userAnswers[currentQuestionIndex] ? true : false;
+  let timer: NodeJS.Timeout | undefined;
+  useEffect(() => {
+    if (timeLeft === 0) {
+      handleSkip();
+    }
+    timer = setTimeout(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [timeLeft]);
 
   const handleOnAnswerClick = (
     answer: string,
     currentQuestionIndex: number
   ) => {
     if (isQuestionAnswered) return;
-    console.log(answer);
     const isCorrect = questions[currentQuestionIndex].correct_answer === answer;
+    const timeBonus = timeLeft > 7 ? 5 : 3;
     if (isCorrect) {
-      console.log('correct');
-      setScore((prev) => prev + 5);
+      setScore((prev) => prev + timeBonus);
     } else {
       setScore((prev) => prev - 1);
     }
     setUserAnswers((prev) => ({ ...prev, [currentQuestionIndex]: answer }));
+    setTimeLeft(10);
   };
 
-  const handleChangeQuestion = (step: number) => {
-    console.log(step);
-    const newQuestionIndex = currentQuestionIndex + step;
-    if (newQuestionIndex < 0 || newQuestionIndex >= totalQuestions) return;
-    setCurrentQuestionIndex(newQuestionIndex);
+  const handleSkip = () => {
+    if (skips >= 2) {
+      setScore((prev) => prev - 2);
+    } else {
+      setSkips((prev) => prev + 1);
+    }
+    setUserAnswers((prev) => ({ ...prev, [currentQuestionIndex]: 'skipped' }));
+    const newQuestionIndex = currentQuestionIndex + 1;
+    if (newQuestionIndex < 0 || newQuestionIndex >= totalQuestions) {
+      clearTimeout(timer);
+      setTimeLeft(-1);
+      return;
+    }
+    setCurrentQuestionIndex((prev) => prev + 1);
+    setTimeLeft(10);
   };
+
+  // const handleChangeQuestion = (step: number) => {
+  //   if (isQuestionAnswered || skips >= 2) {
+  //     const newQuestionIndex = currentQuestionIndex + step;
+  //     if (newQuestionIndex < 0 || newQuestionIndex >= totalQuestions) {
+  //       setTimeLeft(-1);
+  //       clearTimeout(timer);
+  //       return;
+  //     }
+  //     setCurrentQuestionIndex(newQuestionIndex);
+  //     setSkips(0);
+  //     setTimeLeft(10);
+  //   }
+  // };
 
   const correctAnswer = (
     isQuestionAnswered: Boolean,
@@ -50,7 +83,6 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
     correctAns: string
   ) => {
     if (isQuestionAnswered) {
-      console.log(ans, correctAns);
       if (ans === correctAns) {
         return 'bg-green-700 text-gray-100 transition-colors duration-200 ease-in-out';
       }
@@ -100,22 +132,23 @@ const QuizComponent = ({ questions, totalQuestions }: Props) => {
           </button>
         ))}
       </div>
-      <div className='flex justify-between mt-16'>
-        <button
+      <div className='flex justify-center mt-16'>
+        {/* <Button
+          text='Skip'
           className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
-          onClick={() => handleChangeQuestion(-1)}>
-          Prev
-        </button>
-        <button
+          onClick={handleSkip}
+        /> */}
+        <Button
+          text={currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}
           className='bg-gray-200 hover:bg-gray-400 transition-colors duration-200 ease-in-out text-gray-700 font-bold py-2 px-4 rounded'
-          onClick={
-            currentQuestionIndex === totalQuestions - 1
-              ? () => router.push('/')
-              : () => handleChangeQuestion(1)
-          }>
-          {currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}
-        </button>
+          onClick={handleSkip}
+        />
       </div>
+      {timeLeft >= 0 ? (
+        <p className='text-gray-700 font-bold pb-2 text-sm mt-4'>
+          Time Left: {timeLeft}
+        </p>
+      ) : null}
     </div>
   );
 };
