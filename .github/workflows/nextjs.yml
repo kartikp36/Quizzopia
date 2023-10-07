@@ -75,12 +75,16 @@ jobs:
 
   # Deployment job
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2  # Use the latest version of checkout action
+        with:
+          ref: deployment
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+        uses: JamesIves/github-pages-deploy-action@3.7.1  # Use a dedicated GitHub Pages deploy action
+        with:
+          branch: deployment
+          folder: out  # Specify the folder to deploy
+          token: ${{ secrets.GH_PAGES_TOKEN }}  # Use your GitHub token secret
