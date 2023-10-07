@@ -71,7 +71,7 @@ jobs:
           git checkout -b deployment
           git add ./out
           git commit -m "Deploy build assets to 'deployment' branch"
-          git push origin deployment
+          git push --force origin deployment
 
   # Deployment job
   deploy:
