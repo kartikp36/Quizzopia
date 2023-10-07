@@ -14,11 +14,15 @@ on:
 permissions:
   contents: read
   pages: write
+  id-token: write
 
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    env:
+      # Define a 'gh_pages_token' environment variable with your GitHub token
+      gh_pages_token: ${{ secrets.GH_PAGES_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -62,6 +66,8 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Create deployment branch
         run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           git checkout -b deployment
           git add ./out
           git commit -m "Deploy build assets to 'deployment' branch"
