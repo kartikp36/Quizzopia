@@ -11,7 +11,7 @@ type Props = {
 
 const QuizComponent = ({ questions, totalQuestions }: Props) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const router = useRouter(); 
+  const router = useRouter();
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
   const [skips, setSkips] = useState(0);

@@ -1,12 +1,13 @@
 type Props = {
   text: string;
   onClick?: () => void;
+  className?: string;
 };
 
-const Button = ({ text, onClick }: Props) => {
+const Button = ({ text, onClick, className }: Props) => {
   return (
     <button
-      className='bg-[#29bc9b] font-bold h-[45px] min-w-[120px] rounded-[8px] text-white hover:bg-[#1e9a7a] transition-colors duration-200 ease-in-out'
+      className={`${className} font-bold h-[45px] min-w-[120px] rounded-[8px]`}
       onClick={onClick}>
       {text}
     </button>
